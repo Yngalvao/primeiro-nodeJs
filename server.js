@@ -1,14 +1,38 @@
 const { createServer } = require('node:http');
-const { hostname } = require('node:os');
 
-const host = '127.0.0.1';
+const host = 'localhost';
 const port = 3000;
 
-const server = createServer((request, response) => {
-    response.writeHead(200, { 'Content-Type': 'text/html'});
-    response.end('<h1>Hello Wold!</h1> <br /> Aula de Backend');
+const produtos = [
+];
+
+const app = createServer((request, response) => {
+
+    const { url, method } = request;
+
+    console.log(" URL - ", url);
+    console.log("Método/Verbo - ", method);
+
+    if (url === '/') {
+        response.writeHead(200, { 'Content-Type': 'text/plain' });
+        return response.end("Olá Node.Js, Servidor OK");
+    }
+
+    if (url === '/produtos') {
+        response.writeHead(200, { 'Content-Type': 'application/json' });
+        return response.end(JSON.stringify(produtos));
+    }
+
+    if (url === '/produtos/adicionar') {
+        response.writeHead(200, { 'Content-Type': 'text/plain' });
+        return response.end("Produto Adicionado comSucesso");
+    }
+
+    response.writeHead(404, { 'Content-Type': 'text/plain' });
+    return response.end("Página não encontrada - Not Found");
+
 });
 
-server.listen(port, host, () => {
- console.log(`Servidor executando http://${host}:${port}`)
-});
+app.listen(port, host, () => {
+    console.log(`Servidor executando http://${host}:${port}`)
+}); 
