@@ -1,10 +1,9 @@
-const { createServer } = require('node:http')
-const listarProdutos = require('./routes/produtos')
+const { createServer } = require('node:http');
+const Produtos = require('./routes/produtos');
+const rotas = require('./routes/router');
+
 const host = 'localhost';
 const port = 3000;
-
-const produtos = [
-];
 
 const app = createServer((request, response) => {
 
@@ -18,30 +17,28 @@ const app = createServer((request, response) => {
         return response.end("Olá Node.Js, Servidor OK");
     }
 
-    if (url === '/produtos') {
-
-        const dados = listarProdutos();
-
+    if (url === '/produtos' && method === 'GET') {
+        rotas[produtos][method];
+        const dados = Produtos.listar();
         response.writeHead(200, { 'Content-Type': 'application/json' });
         return response.end(JSON.stringify(dados));
     }
 
-    if (url === '/produtos/adicionar') {
-
-        produtos.push({
-            id: 3,
-            nome: 'Monitor 34p',
-            valor: 3330.00
-        });
-
+    if (url === '/produtos' && method === 'POST') { //adicionar
+        Produtos.adicionar(4, 'Monitor', 5000.00);
         response.writeHead(200, { 'Content-Type': 'text/plain' });
         return response.end("Produto Adicionado com sucesso");
     }
 
-    if (url === '/produtos/remover') {
 
-        produtos.pop();
+    if (url === '/produtos' && method === 'PUT') { //editar
+        Produtos.editar();
+        response.writeHead(200, { 'Content-Type': 'text/plain' });
+        return response.end("Produto Editado com sucesso");
+    }
 
+    if (url === '/produtos' && method === 'DELETE') { //remover
+        Produtos.excluir(1);
         response.writeHead(200, { 'Content-Type': 'text/plain' });
         return response.end("Produto removido com sucesso");
     }
